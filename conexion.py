@@ -2,12 +2,12 @@ import mysql.connector
 
 
 #establishing the connection
-conn = mysql.connector.connect(
+conexion = mysql.connector.connect(
    user='root', password='', host='127.0.0.1', database='twitter'
 )
 
 #Creating a cursor object using the cursor() method
-cursor = conn.cursor()
+cursor = conexion.cursor()
 
 #Executing an MYSQL function using the execute() method
 cursor.execute("SELECT DATABASE()")
@@ -18,4 +18,4 @@ data = cursor.fetchone()
 print("Connection established to: ",data)
 
 #Closing the connection
-conn.close()
+conexion.close()

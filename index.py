@@ -1,3 +1,4 @@
+from contextlib import nullcontext
 from pprint import pprint
 from subprocess import TimeoutExpired
 from selenium import webdriver
@@ -7,31 +8,56 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from pprint import pprint
-#import mysql.connector
-#import time 
-#import conexion
+import mysql.connector
+
+users = (["@ManuelTurizoMTZ"])    
+conexion = nullcontext
+driver = webdriver.Chrome('./chromedriver')
+
+def openDB():
+    conexion = mysql.connector.connect(
+        user='root', password='', host='localhost', database='twitter'
+    )
+
+def insertarSQL(sql):
+    openDB()
+    cursor = conexion.cursor()
+    try:
+        cursor.execute(sql)
+        conexion.commit()
+    except:
+        conexion.rollback()
+    conexion.close()
+    return 0
+
+def guardarTweet(texto):
+    sql= "insert into dato(twitter) values(`"+texto+"`)"
+    print("sql " + sql)
+    try:
+        insertarSQL(sql)
+        return True
+    except:
+        print("Error al insertar: ", sql)
+        return False
+
 def waitUntilReady(driver, delay, by, value_by):
     try:
         myElem = WebDriverWait(driver, delay).until(EC.presence_of_element_located((by, value_by)))
         print("Page is ready!")
     except TimeoutException:
         print("Loading took too much time!")
-    #PATH = "C:\\Data\\Universidad\\twitterselenium\\chromedriver.exe"
-    #driver = webdriver.Chrome(PATH)
-driver = webdriver.Chrome('./chromedriver')
+
 def getTweets(user):
     driver.get("https://twitter.com/" + user)
     waitUntilReady(driver, 5, By.CSS_SELECTOR, "div[data-testid=cellInnerDiv]")
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     elements = driver.find_elements(By.CSS_SELECTOR, "[data-testid='tweet']")
-    #elements = driver.find_elements(By.CSS_SELECTOR, "div[data-testid=cellInnerDiv]")
     for element in elements:
-        print(element.text)
-    #print(elements.text)
-    #set(elements)
+        txt = element.text
+        txtLimpio = txt.rstrip('\n')
+        #guardarTweet(txt)
+        print(txtLimpio)
 
-users = (["@ManuelTurizoMTZ","@andrescepeda","@Greeicy_rendon", "@TheRock" , "@J_Rodrigues99"])    
 for user in users: 
+    print(user)
     getTweets(user)  
-#driver.close()
-
