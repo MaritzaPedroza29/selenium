@@ -54,10 +54,10 @@ def getTweets(user):
     elements = driver.find_elements(By.CSS_SELECTOR, "[data-testid='tweet']")
     for element in elements:
         txt = element.text
-        txt.rstrip()
+        txtLimpio = txt.replace('\n', ' ')
         #txtLimpio = txt.rstrip('\n')
         #guardarTweet(txt)
-        print(txt)
+        print(txtLimpio)
 
 for user in users: 
     print(user)
