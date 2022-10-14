@@ -9,8 +9,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from pprint import pprint
 import mysql.connector
+import conexion
 
-users = (["@ManuelTurizoMTZ"])    
+users = (["@ManuelTurizoMTZ","@TheRock","@Greeicy_rendon","@Cristiano","@AnaPoloTV"])    
 conexion = nullcontext
 driver = webdriver.Chrome('./chromedriver')
 
